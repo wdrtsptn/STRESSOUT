@@ -50,7 +50,8 @@
       color: #555;
     }
 
-    .profile input {
+    .profile input,
+    .profile select {
       width: 100%;
       padding: 10px;
       border: 1px solid #ddd;
@@ -66,6 +67,8 @@
       padding: 10px 16px;
       border-radius: 8px;
       cursor: pointer;
+      width: 100%;
+      font-weight: bold;
     }
 
     /* Arena */
@@ -97,6 +100,7 @@
       border-radius: 8px;
       cursor: pointer;
       font-weight: bold;
+      width: 100%;
     }
 
     /* Peta */
@@ -156,7 +160,7 @@
         <option value="laki">Laki-laki</option>
         <option value="perempuan">Perempuan</option>
       </select>
-      <button>Edit Profil</button>
+      <button id="saveProfile">Simpan Profil</button>
     </div>
 
     <!-- Tengah: Arena -->
@@ -176,18 +180,64 @@
         <option value="jauh">Jauh (acak)</option>
       </select>
 
-      <button>Mulai Cari Lawan</button>
+      <button id="cariLawan">Mulai Cari Lawan</button>
     </div>
 
     <!-- Kanan: Peta -->
     <div class="card map">
       <h3>Peta Matchmaking</h3>
-      <div class="visual">(visual peta sederhana)</div>
-      <div class="status">
+      <div class="visual" id="mapVisual">(visual peta sederhana)</div>
+      <div class="status" id="statusMatch">
         Belum mencari lawan.<br />
         Isi data lalu klik <b>"Mulai Cari Lawan"</b>.
       </div>
     </div>
   </div>
+
+  <script>
+    // === SIMPAN & LOAD PROFIL ===
+    const nama = document.getElementById('nama');
+    const umur = document.getElementById('umur');
+    const gender = document.getElementById('gender');
+    const tinggi = document.getElementById('tinggi');
+    const berat = document.getElementById('berat');
+    const statusMatch = document.getElementById('statusMatch');
+    const mapVisual = document.getElementById('mapVisual');
+
+    // Load data dari localStorage pas pertama kali buka
+    window.addEventListener('load', () => {
+      if(localStorage.getItem('nama')) nama.value = localStorage.getItem('nama');
+      if(localStorage.getItem('umur')) umur.value = localStorage.getItem('umur');
+      if(localStorage.getItem('gender')) gender.value = localStorage.getItem('gender');
+    });
+
+    // Simpan profil
+    document.getElementById('saveProfile').addEventListener('click', () => {
+      localStorage.setItem('nama', nama.value);
+      localStorage.setItem('umur', umur.value);
+      localStorage.setItem('gender', gender.value);
+      alert('Profil lo udah disimpan, dawg!');
+    });
+
+    // === MATCHMAKING SIMULASI ===
+    document.getElementById('cariLawan').addEventListener('click', () => {
+      const t = tinggi.value;
+      const b = berat.value;
+
+      if(!t || !b) {
+        alert('Isi tinggi dan berat badan dulu, dawg!');
+        return;
+      }
+
+      statusMatch.innerHTML = 'Mencari lawan... ⏳';
+      mapVisual.textContent = '(loading...)';
+
+      setTimeout(() => {
+        statusMatch.innerHTML = `🔥 Lawan ditemukan! <br>Nama: Asep <br>Tinggi: 171 cm | Berat: 62 kg <br>Jarak: Dekat`;
+        mapVisual.textContent = '📍 Titik duel ditentukan';
+      }, 2500);
+    });
+  </script>
 </body>
 </html>
+
